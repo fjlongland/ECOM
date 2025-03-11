@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
+from .routers import user_router
 
 from database import dbModels as models
 from database.database import engine
@@ -19,7 +20,9 @@ async def favicon():
 def root():
     return {"Hello": "traveler!"}
 
-#some changes to test merging and dev branch
+app.include_router(user_router.router)
+
+
 
 
 
