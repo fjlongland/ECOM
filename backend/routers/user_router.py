@@ -7,15 +7,10 @@ from database import dbModels
 router = APIRouter(prefix="/users", 
                    tags=["users"])
 
-
-
-
 #just for testing the user table connection
-@router.get("/test")
-def test_user_rout(db: Session = Depends(get_db)):
-    return{"Users": "Works"}
-
-
+# @router.get("/test")
+# def test_user_rout(db: Session = Depends(get_db)):
+#     return{"Users": "Works"}
 
 #create a new user
 #TODO: add hashing for passwords
@@ -31,8 +26,6 @@ def new_user(db: Session = Depends(get_db)):
 
     return{"test user": "crested"}
 
-
-
 #get one user
 #TODO: add a response model
 @router.get("/{id}")
@@ -42,9 +35,6 @@ def get_user(id: int,
     get_user = db.query(dbModels.User).filter(dbModels.User.user_id == id).first()
 
     return(get_user)
-
-
-
 
 #update a user
 #TODO: add userCreate model
@@ -64,11 +54,6 @@ def update_user(id: int,
 
     return{f"user {id}": "updated"}
 
-
-
-
-
-
 #delete a user
 #TODO: add HTTP return
 @router.delete("/{id}")
@@ -84,4 +69,3 @@ def delete_user(id: int,
     db.commit()
 
     return {f"User {id}": "Deleted"}
-
