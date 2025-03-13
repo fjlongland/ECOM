@@ -44,7 +44,7 @@ def get_user(id: int,
     return(get_user)
 
 #update a user
-#TODO: add userCreate model
+#TODO: add response model
 @router.put("/{id}")
 def update_user(id: int, 
                 db: Session = Depends(get_db)):

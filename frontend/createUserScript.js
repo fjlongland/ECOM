@@ -41,6 +41,4 @@ document.getElementById("btnSubmit").addEventListener('click', async function(ev
         alert("an error occured while trying to create user :(");
         return null;
     }
-
-
 });

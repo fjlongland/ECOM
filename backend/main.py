@@ -4,6 +4,7 @@ from fastapi.responses import FileResponse
 from fastapi.middleware.cors import CORSMiddleware
 
 from .routers import user_router
+from .routers import post_router
 
 from database import dbModels as models
 from database.database import engine
@@ -33,6 +34,7 @@ def root():
     return {"Hello": "traveler!"}
 
 app.include_router(user_router.router)
+app.include_router(post_router.router)
 
 
 
