@@ -1,7 +1,8 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, status, Form
 from sqlalchemy.orm import Session
 from database.database import get_db
 from database import dbModels
+from .. import schemas
 
 #create the router for the user table
 router = APIRouter(prefix="/users", 
@@ -14,17 +15,23 @@ router = APIRouter(prefix="/users",
 
 #create a new user
 #TODO: add hashing for passwords
-#TODO: add a response model
-@router.post("/")
-def new_user(db: Session = Depends(get_db)):
+#TODO: expand user database to add more info on user
+@router.post("/", 
+             response_model=schemas.CreateResponse, 
+             status_code=status.HTTP_201_CREATED,
+             )
+def new_user(db: Session = Depends(get_db), 
+             user_name: str = Form(...), 
+             user_password: str = Form(...)):
 
-    new_user = dbModels.User(user_name = 'test username',
-                             user_password = 'test passeord',)
+    new_user = dbModels.User(user_name = user_name,
+                             user_password = user_password,)
     
     db.add(new_user)
     db.commit()
+    db.refresh(new_user)
 
-    return{"test user": "crested"}
+    return new_user
 
 #get one user
 #TODO: add a response model

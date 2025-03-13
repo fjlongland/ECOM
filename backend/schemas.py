@@ -5,5 +5,12 @@ class BasicUser(BaseModel):
     user_password: str
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
+
+
+class CreateResponse(BaseModel):
+    user_id: int
+
+    class Config:
+        from_attributes = True
