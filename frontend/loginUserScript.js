@@ -1,6 +1,40 @@
-document.getElementById("btnLogin").addEventListener("click", async function(){
-    const username = document.getElementById("txtUsername").value;
-    const password = document.getElementById("txtPassword").value;
+document.getElementById("btnLogin").addEventListener('click', async function(event){
+    event.preventDefault();
 
-    alert("loging in user "+username+" with password "+password);
-})
+    const new_username = document.getElementById("txtUsername").value;
+    const new_password = document.getElementById("txtPassword").value;
+
+    //console.log("Username: "+new_username+"\tPassword: "+new_password);
+
+    try{
+        const formdata = new URLSearchParams()
+        formdata.append("username", new_username);
+        formdata.append("password", new_password);
+
+        const response = await fetch("http://127.0.0.1:8000/users/login", {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: formdata
+        });
+
+        if(!response.ok){
+            const errorData = await response.json();
+            console.error("Error response: ", errorData);
+            throw new Error("Network response was not ok: "+ response.status);
+        }
+
+        const data = await response.json();
+
+        if(data.user_id){
+            console.log(data.user_id)
+            alert("user ("+data.user_id+") was found")
+        }
+    }
+    catch(error){
+        console.error("there was an error creating user: ", error);
+        alert("an error occured while trying to login");
+        return null;
+    }
+});

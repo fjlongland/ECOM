@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, status, Form
+from fastapi import APIRouter, Depends, status, Form, HTTPException
 from sqlalchemy.orm import Session
 from database.database import get_db
 from database import dbModels
@@ -76,3 +76,23 @@ def delete_user(id: int,
     db.commit()
 
     return {f"User {id}": "Deleted"}
+
+
+
+
+@router.post("/login")
+def userLogin(db: Session = Depends(get_db), 
+              username: str = Form(...), 
+              password: str = Form(...)):
+    #print(f"Received login attempt: username={username}, password={password}")
+
+    attempt_user = db.query(dbModels.User).filter(dbModels.User.user_name == username, 
+                                                  dbModels.User.user_password == password
+                                                  ).first()
+
+    if not attempt_user:
+        print("Invalid login: User not found")
+
+    #print(f"Login successful for user: {attempt_user.user_id}")
+
+    return {"user_id": attempt_user.user_id, "message": "Login successful"}
