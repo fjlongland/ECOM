@@ -1,7 +1,8 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Form
 from sqlalchemy.orm import Session
 from database.database import get_db
 from database import dbModels
+from .. import schemas
 
 router = APIRouter(prefix="/posts",
                    tags=["posts"])
@@ -19,15 +20,18 @@ router = APIRouter(prefix="/posts",
 
 
 #create a new user
-@router.post("/")
-def new_post(db: Session = Depends(get_db)):
-    new_post = dbModels.Post(post_title="Test Title",
-                             post_content="Test Content")
+@router.post("/", response_model = schemas.createPostResponse)
+def new_post(db: Session = Depends(get_db),
+             title: str = Form(...),
+             content: str = Form(...)):
+    new_post = dbModels.Post(post_title=title,
+                             post_content=content)
     
     db.add(new_post)
     db.commit()
+    db.refresh(new_post)
 
-    return {"post": "created"}
+    return new_post
 
 
 #get a single user

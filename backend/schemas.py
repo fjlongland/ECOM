@@ -9,8 +9,14 @@ class BasicUser(BaseModel):
 
 
 
-class CreateResponse(BaseModel):
+class CreateUserResponse(BaseModel):
     user_id: int
+
+    class Config:
+        from_attributes = True
+
+class createPostResponse(BaseModel):
+    post_id: int
 
     class Config:
         from_attributes = True

@@ -30,6 +30,7 @@ document.getElementById("btnLogin").addEventListener('click', async function(eve
         if(data.user_id){
             console.log(data.user_id)
             alert("user ("+data.user_id+") was found")
+            window.location.href = "homePage.html"
         }
     }
     catch(error){

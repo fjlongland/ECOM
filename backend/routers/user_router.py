@@ -17,7 +17,7 @@ router = APIRouter(prefix="/users",
 #TODO: add hashing for passwords
 #TODO: expand user database to add more info on user
 @router.post("/", 
-             response_model=schemas.CreateResponse, 
+             response_model=schemas.CreateUserResponse, 
              status_code=status.HTTP_201_CREATED,
              )
 def new_user(db: Session = Depends(get_db), 

@@ -29,7 +29,11 @@ document.getElementById("btnSubmit").addEventListener('click', async function(ev
             throw new Error("Network response was not ok: "+ response.status);
         }
 
+        console.log(response)
+
         const data = await response.json();
+
+
 
         if(data.user_id){
             console.log(data.user_id)
