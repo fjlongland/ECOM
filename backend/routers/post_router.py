@@ -1,4 +1,6 @@
-from fastapi import APIRouter, Depends, Form
+import os
+
+from fastapi import APIRouter, Depends, Form, UploadFile, File
 from sqlalchemy.orm import Session
 from database.database import get_db
 from database import dbModels
@@ -12,6 +14,10 @@ router = APIRouter(prefix="/posts",
 #     return{"posts": "works"}
 
 
+Upload_Dir = os.path.join(os.path.expanduser("~"), "Desktop", "uploads")
+os.makedirs(Upload_Dir, exist_ok=True)
+
+
 
 #TODO: add frontend calls
 #TODO: add response model for all crud operations
@@ -23,13 +29,28 @@ router = APIRouter(prefix="/posts",
 @router.post("/", response_model = schemas.createPostResponse)
 def new_post(db: Session = Depends(get_db),
              title: str = Form(...),
-             content: str = Form(...)):
+             content: str = Form(...),
+             image: UploadFile = File(...)):
+    
+
     new_post = dbModels.Post(post_title=title,
                              post_content=content)
+    
     
     db.add(new_post)
     db.commit()
     db.refresh(new_post)
+    
+    image_path = os.path.join(Upload_Dir, image.filename)
+    with open(image_path, "wb") as f:
+        f.write(image.file.read())
+
+    new_image = dbModels.Image(image_loc=image_path, post_id_fk = new_post.post_id )
+
+    db.add(new_image)
+    db.commit()
+    
+    
 
     return new_post
 

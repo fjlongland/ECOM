@@ -1,5 +1,6 @@
 from .database import Base
-from sqlalchemy import Column, String, Integer
+from sqlalchemy import Column, String, Integer, LargeBinary, ForeignKey
+from sqlalchemy.orm import relationship
 from sqlalchemy.sql.sqltypes import TIMESTAMP
 from sqlalchemy.sql.expression import text
 
@@ -25,3 +26,13 @@ class Post(Base):
     post_title = Column(String, nullable=False)
     post_content = Column(String, nullable=False)
     date_created = Column(TIMESTAMP(timezone=True), nullable=False, server_default=text("now()"))
+
+
+class Image(Base):
+    __tablename__ = "image"
+
+    image_id = Column(Integer, primary_key=True, nullable=False)
+    image_loc = Column(String, nullable=False)
+    post_id_fk = Column(Integer, ForeignKey("post.post_id", ondelete="CASCADE", onupdate="CASCADE"), nullable=False)
+
+    owner = relationship("Post")
