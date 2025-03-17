@@ -1,5 +1,6 @@
 import os
 
+from typing import List
 from fastapi import APIRouter, Depends, Form, UploadFile, File
 from sqlalchemy.orm import Session
 from database.database import get_db
@@ -30,7 +31,7 @@ os.makedirs(Upload_Dir, exist_ok=True)
 def new_post(db: Session = Depends(get_db),
              title: str = Form(...),
              content: str = Form(...),
-             image: UploadFile = File(...)):
+             images: List[UploadFile] = File(...)):
     
 
     new_post = dbModels.Post(post_title=title,
@@ -41,17 +42,17 @@ def new_post(db: Session = Depends(get_db),
     db.commit()
     db.refresh(new_post)
     
-    image_path = os.path.join(Upload_Dir, image.filename)
-    with open(image_path, "wb") as f:
-        f.write(image.file.read())
+    for image in images:
+        image_path = os.path.join(Upload_Dir, image.filename)
+        with open(image_path, "wb") as f:
+            f.write(image.file.read())
 
-    new_image = dbModels.Image(image_loc=image_path, post_id_fk = new_post.post_id )
+        new_image = dbModels.Image(image_loc=image_path, post_id_fk = new_post.post_id )
 
-    db.add(new_image)
+        db.add(new_image)
+
     db.commit()
     
-    
-
     return new_post
 
 

@@ -1,7 +1,7 @@
 document.getElementById("btnUpload").addEventListener("click", async function(){
     const newTitle = document.getElementById("txtTitle").value;
     const newContent = document.getElementById("txtContent").value;
-    const newImage =document.getElementById("inpImage").files[0];
+    const newImages =document.getElementById("inpImage").files;
 
     const feedback = "Title: "+newTitle+"\tContent: "+newContent
 
@@ -11,7 +11,10 @@ document.getElementById("btnUpload").addEventListener("click", async function(){
         const formdata = new FormData();
         formdata.append("title", newTitle);
         formdata.append("content", newContent);
-        formdata.append("image", newImage);
+        
+        for(let i=0; i< newImages.length; i++){
+            formdata.append("images", newImages[i]);
+        }
 
         const response = await fetch('http://127.0.0.1:8000/posts', {
             method: 'POST',
