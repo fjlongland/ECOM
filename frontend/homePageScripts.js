@@ -54,6 +54,11 @@ document.addEventListener("DOMContentLoaded", async function(){
                 console.log(image.image_loc)
                 img.src = "http://127.0.0.1:8000/"+image.image_loc;
                 img.alt = "";
+
+                img.style.width = "200px";
+                img.style.height = "200px";
+                img.style.objectFit = "cover";
+
                 imageContainer.appendChild(img);
             }
         }
