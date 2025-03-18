@@ -14,8 +14,9 @@ router = APIRouter(prefix="/posts",
 # def test():
 #     return{"posts": "works"}
 
+BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__),"..",".."))
 
-Upload_Dir = os.path.join(os.path.expanduser("~"), "Desktop", "uploads")
+Upload_Dir = os.path.join(BASE_DIR, "static", "uploaded_images")
 os.makedirs(Upload_Dir, exist_ok=True)
 
 
@@ -47,7 +48,9 @@ def new_post(db: Session = Depends(get_db),
         with open(image_path, "wb") as f:
             f.write(image.file.read())
 
-        new_image = dbModels.Image(image_loc=image_path, post_id_fk = new_post.post_id )
+        loc_retrieve = f"static/uploaded_images/{image.filename}"
+
+        new_image = dbModels.Image(image_loc=loc_retrieve, post_id_fk = new_post.post_id )
 
         db.add(new_image)
 
@@ -84,15 +87,22 @@ def update_post(id: int,
 
 #delete a single user
 @router.delete("/{id}")
-def delete_user(id: int,
+def delete_post(id: int,
                 db: Session = Depends(get_db)):
     
-    delete_user = db.query(dbModels.Post).filter(dbModels.Post.post_id == id).first()
+    delete_post = db.query(dbModels.Post).filter(dbModels.Post.post_id == id).first()
 
-    if delete_user == None:
+    if delete_post == None:
         print("post does not exhist.")
 
-    db.delete(delete_user)
+    db.delete(delete_post)
     db.commit()
 
     return{f"post {id}": "Deleted"}
+
+@router.get("/")
+def get_all_posts(db: Session = Depends(get_db)):
+
+    posts = db.query(dbModels.Post).all()
+
+    return posts
