@@ -28,9 +28,10 @@ document.getElementById("btnLogin").addEventListener('click', async function(eve
         const data = await response.json();
 
         if(data.user_id){
-            console.log(data.user_id)
-            alert("user ("+data.user_id+") was found")
-            window.location.href = "homePage.html"
+            console.log(data.user_id);
+            alert("user ("+data.user_id+") was found");
+            document.cookie = "user_id="+data.user_id;
+            window.location.href = "homePage.html";
         }
     }
     catch(error){

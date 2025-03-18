@@ -25,8 +25,10 @@ class Post(Base):
     post_id = Column(Integer, primary_key=True, nullable=False)
     post_title = Column(String, nullable=False)
     post_content = Column(String, nullable=False)
+    user_id_fk = Column(Integer, ForeignKey("user.user_id", ondelete="CASCADE", onupdate="CASCADE"), nullable=False)
     date_created = Column(TIMESTAMP(timezone=True), nullable=False, server_default=text("now()"))
 
+    owner = relationship("User")
 
 class Image(Base):
     __tablename__ = "image"

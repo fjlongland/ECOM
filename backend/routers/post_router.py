@@ -32,11 +32,13 @@ os.makedirs(Upload_Dir, exist_ok=True)
 def new_post(db: Session = Depends(get_db),
              title: str = Form(...),
              content: str = Form(...),
+             user_id: int = Form(...),
              images: List[UploadFile] = File(...)):
     
 
     new_post = dbModels.Post(post_title=title,
-                             post_content=content)
+                             post_content=content,
+                             user_id_fk=user_id)
     
     
     db.add(new_post)
@@ -104,5 +106,13 @@ def delete_post(id: int,
 def get_all_posts(db: Session = Depends(get_db)):
 
     posts = db.query(dbModels.Post).all()
+
+    return posts
+
+@router.get("/user/{id}")
+def get_user_posts(id: int,
+                   db: Session = Depends(get_db)):
+    
+    posts = db.query(dbModels.Post).filter(dbModels.Post.user_id_fk == id).all()
 
     return posts
