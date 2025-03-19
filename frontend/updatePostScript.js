@@ -117,3 +117,24 @@ function getCookie(name){
     return null;
 }
 
+document.getElementById("btnDelete").addEventListener("click", async function () {
+
+    const post_id = getCookie("post_id");
+
+    try{
+        const response = await fetch('http://127.0.0.1:8000/posts/'+post_id, {
+            method: "DELETE"
+        });
+
+        if(response.status !== 204){
+            alert("could not delete user");
+            return;
+        }
+
+        alert("user: ("+post_id+") was deleted successfully.");
+    }
+    catch(error){
+        console.error("there was an error while trying to delete post:", error);
+    }
+    
+})

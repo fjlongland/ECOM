@@ -1,7 +1,7 @@
 import os
 
 from typing import List
-from fastapi import APIRouter, Depends, Form, UploadFile, File
+from fastapi import APIRouter, Depends, Form, UploadFile, File, Response, status
 from sqlalchemy.orm import Session
 from database.database import get_db
 from database import dbModels
@@ -77,7 +77,7 @@ def update_post(id: int,
                 title: str = Form(...), 
                 content: str = Form(...)):
     update_post = db.query(dbModels.Post).filter(dbModels.Post.post_id == id).first()
-    print(title, content)
+
     if update_post == None:
         print("post does not exhist")
     
@@ -102,7 +102,7 @@ def delete_post(id: int,
     db.delete(delete_post)
     db.commit()
 
-    return{f"post {id}": "Deleted"}
+    return Response(status_code=status.HTTP_204_NO_CONTENT)
 
 @router.get("/")
 def get_all_posts(db: Session = Depends(get_db)):
