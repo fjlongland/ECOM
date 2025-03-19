@@ -73,18 +73,20 @@ def get_post(id: int,
 #update a single user
 @router.put("/{id}")
 def update_post(id: int,
-                db: Session = Depends(get_db)):
+                db: Session = Depends(get_db), 
+                title: str = Form(...), 
+                content: str = Form(...)):
     update_post = db.query(dbModels.Post).filter(dbModels.Post.post_id == id).first()
-
+    print(title, content)
     if update_post == None:
         print("post does not exhist")
     
-    update_post.post_title = "updated Title"
-    update_post.post_content = "updated Content"
+    update_post.post_title = title
+    update_post.post_content = content
 
     db.commit()
 
-    return{f"post {id}": "updated"}
+    return {"post_id": update_post.post_id}
 
 
 #delete a single user

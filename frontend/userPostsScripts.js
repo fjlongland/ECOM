@@ -21,8 +21,9 @@ document.addEventListener("DOMContentLoaded", async function(){
             postDiv.classList.add("pst");
 
             postDiv.innerHTML = "<h2>"+pst.post_title+"</h2>"+
-                                "<p>"+pst.post_contnet+"</p>"+
-                                "<div class='images' id='images-"+pst.post_id+"'></div>";
+                                "<p>"+pst.post_content+"</p>"+
+                                "<div class='images' id='images-"+pst.post_id+"'></div>"+
+                                "<button class='btnEdit' data-id='"+pst.post_id+"'>Edit</button>";
             
             list.appendChild(postDiv);
 
@@ -70,6 +71,20 @@ document.addEventListener("DOMContentLoaded", async function(){
 })
 
 
+document.addEventListener("click", function(event){
+    if (event.target.classList.contains("btnEdit")){
+        let postId = event.target.dataset.id;
+        console.log("selecting post id: ", postId)
+
+        document.cookie ="post_id="+encodeURIComponent(postId)+"; path=/";
+
+        window.location.href = "updatePost.html";
+    }
+
+    console.log(document.cookie)
+})
+
+
 function getCookie(name){
     const cookies = document.cookie.split("; ");
     for (const cookie of cookies){
@@ -80,3 +95,4 @@ function getCookie(name){
     }
     return null;
 }
+
