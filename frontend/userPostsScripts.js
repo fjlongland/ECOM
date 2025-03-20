@@ -23,7 +23,8 @@ document.addEventListener("DOMContentLoaded", async function(){
             postDiv.innerHTML = "<h2>"+pst.post_title+"</h2>"+
                                 "<p>"+pst.post_content+"</p>"+
                                 "<div class='images' id='images-"+pst.post_id+"'></div>"+
-                                "<button class='btnEdit' data-id='"+pst.post_id+"'>Edit</button>";
+                                "<button class='btnEdit' data-id='"+pst.post_id+"'>Edit</button>"+
+                                "<hr>";
             
             list.appendChild(postDiv);
 

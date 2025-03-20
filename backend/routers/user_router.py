@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, status, Form, HTTPException
+from fastapi import APIRouter, Depends, status, Form, HTTPException, Response
 from sqlalchemy.orm import Session
 from database.database import get_db
 from database import dbModels
@@ -7,11 +7,6 @@ from .. import schemas
 #create the router for the user table
 router = APIRouter(prefix="/users", 
                    tags=["users"])
-
-#just for testing the user table connection
-# @router.get("/test")
-# def test_user_rout(db: Session = Depends(get_db)):
-#     return{"Users": "Works"}
 
 #create a new user
 #TODO: add hashing for passwords
@@ -75,7 +70,7 @@ def delete_user(id: int,
     db.delete(delete_user)
     db.commit()
 
-    return {f"User {id}": "Deleted"}
+    return Response(status_code=status.HTTP_204_NO_CONTENT)
 
 
 

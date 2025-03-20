@@ -127,11 +127,11 @@ document.getElementById("btnDelete").addEventListener("click", async function ()
         });
 
         if(response.status !== 204){
-            alert("could not delete user");
+            alert("could not delete post");
             return;
         }
 
-        alert("user: ("+post_id+") was deleted successfully.");
+        alert("post: ("+post_id+") was deleted successfully.");
     }
     catch(error){
         console.error("there was an error while trying to delete post:", error);

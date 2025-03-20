@@ -19,7 +19,8 @@ document.addEventListener("DOMContentLoaded", async function(){
 
             postDiv.innerHTML = "<h2>"+post.post_title+"</h2>"+
                                 "<p>"+post.post_content+"</p>"+
-                                "<div class='images' id='images-"+post.post_id+"'></div>";
+                                "<div class='images' id='images-"+post.post_id+"'></div>"+
+                                "<hr>";
 
 
             postList.appendChild(postDiv);
