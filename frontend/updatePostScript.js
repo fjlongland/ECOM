@@ -79,7 +79,7 @@ document.addEventListener("DOMContentLoaded", async function(){
 
             const inp = document.createElement("input");
             inp.type = "file";
-            inp.accept = "image/png";
+            inp.accept = "image/png, image/jpeg, image/jpg";
             inp.style.display = "none";
             inp.id = "inpImage";
             document.body.appendChild(inp);
