@@ -34,6 +34,7 @@ document.getElementById("btnUpload").addEventListener("click", async function(){
         if(data.post_id){
             console.log(data.post_id)
             alert("upload successful")
+            window.location.href = "homePage.html"
         }
     }
     catch (error){

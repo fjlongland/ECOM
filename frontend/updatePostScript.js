@@ -50,19 +50,90 @@ document.addEventListener("DOMContentLoaded", async function(){
                 img.style.height = "200px";
                 img.style.objectFit = "cover";
 
+                img.id = image.image_id;
+
+                img.addEventListener("click", async function() {
+
+                    const isShure = confirm("Are you shure you want to remove this image?");
+                    if(isShure){
+                        removeImage(image.image_id);
+                    }
+                    else{
+                        return;
+                    }
+
+                    
+                })
+
                 imageContainer.appendChild(img);
 
             }
+
+            const btn = document.createElement("button");
+            btn.textContent = "new";
+            btn.style.width = "200px";
+            btn.style.height = "200px";
+            btn.style.verticalAlign = "top";
+            btn.id = "newImage";
+            imageContainer.appendChild(btn);
+
+            const inp = document.createElement("input");
+            inp.type = "file";
+            inp.accept = "image/png";
+            inp.style.display = "none";
+            inp.id = "inpImage";
+            document.body.appendChild(inp);
+
         }
         catch(error){
             console.error("there was an error loading images: ", error);
         }
+
+        document.getElementById("newImage").addEventListener("click", async function(){
+            const inp = document.getElementById("inpImage")
+            inp.click();
+
+        })
+
+        const inp = document.getElementById("inpImage")
+
+        inp.addEventListener("change", async function(){
+
+            const post_id = getCookie("post_id");
+        
+            if (inp.files.length > 0){
+                const file = inp.files[0];
+        
+                const formdata = new FormData();
+        
+                formdata.append("image", file);
+                formdata.append("post_id", post_id);
+        
+                try{
+                    const response = await fetch("http://127.0.0.1:8000/images/", {
+                        method: "POST",
+                        body: formdata,
+                    });
+        
+                    if(!response.ok){
+                        alert("Network error while trying to add image");
+                    }
+        
+                    const data = await response.json();
+        
+                    if(data.image_id){
+                        alert("Image added: ", data.image_id);
+                        location.reload();
+                    }
+                }
+                catch(error){
+                    console.error("there was an error while trying to add inade: ", error);
+                }
+            }
+        })
         
     }
 })
-
-
-
 
 document.getElementById("btnSubmit").addEventListener("click", async function() {
     const updateTitle = document.getElementById("txtUpdateTitle").value;
@@ -96,6 +167,7 @@ document.getElementById("btnSubmit").addEventListener("click", async function() 
 
         if(data.post_id){
             alert("post: "+data.post_id+" was updated successfuly!");
+            window.location.href = "userPosts.html"
         }
 
     }
@@ -137,4 +209,29 @@ document.getElementById("btnDelete").addEventListener("click", async function ()
         console.error("there was an error while trying to delete post:", error);
     }
     
-})
+});
+
+
+async function removeImage(id){
+    try{
+        const response = await fetch("http://127.0.0.1:8000/images/"+id, {
+            method: "DELETE",
+        })
+        
+        if(response.status !== 204){
+            alert("could not felete image ")
+            return;
+        }   
+
+        //const data = await response.json();
+
+
+
+        alert("image ("+id+") was deleted successfully!")
+        location.reload()
+        
+    }
+    catch(error){
+        console.error("Error while trying to delete image: ", error);
+    }
+};

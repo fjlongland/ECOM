@@ -63,6 +63,7 @@ document.addEventListener("DOMContentLoaded", async function(){
                 imageContainer.appendChild(img);
 
             }
+        
         }
         catch(error){
             console.error("there was an error loading images: ", error);
