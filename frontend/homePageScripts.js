@@ -23,6 +23,12 @@ document.addEventListener("DOMContentLoaded", async function(){
                                 "<hr>";
 
 
+            postDiv.addEventListener("click", function(){
+                console.log(post.post_id);
+                document.cookie = "post_id="+post.post_id;
+                window.location = "viewPost.html"
+            })
+
             postList.appendChild(postDiv);
 
             fetchImages(post.post_id);

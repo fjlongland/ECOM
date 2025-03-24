@@ -9,3 +9,9 @@ body{
     background-color: #3498db;
     margin: 50px;
 }
+.post:hover{
+    background-color: aqua;
+}
+.post:active{
+    background-color: blue;
+}
