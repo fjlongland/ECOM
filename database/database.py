@@ -4,6 +4,7 @@ from sqlalchemy.ext.declarative import declarative_base
 from backend.config import settings 
 import urllib
 
+
 password = settings.db_password
 encoded_password = urllib.parse.quote_plus(password)
 
@@ -12,6 +13,7 @@ DB_URL =f"postgresql://{settings.db_username}:{encoded_password}@{settings.db_ho
 
 engine = create_engine(DB_URL)
 
+#start the engin for connecting and interacting with the database.
 SessionLocal = sessionmaker(autoflush=False, bind=engine)
 
 Base = declarative_base()

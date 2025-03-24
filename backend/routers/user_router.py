@@ -8,6 +8,10 @@ from .. import schemas
 router = APIRouter(prefix="/users", 
                    tags=["users"])
 
+
+#TODO: update response models for returns
+
+
 #create a new user
 #TODO: add hashing for passwords
 #TODO: expand user database to add more info on user
@@ -15,6 +19,7 @@ router = APIRouter(prefix="/users",
              response_model=schemas.CreateUserResponse, 
              status_code=status.HTTP_201_CREATED,
              )
+
 def new_user(db: Session = Depends(get_db), 
              user_name: str = Form(...), 
              user_password: str = Form(...)):
@@ -28,8 +33,10 @@ def new_user(db: Session = Depends(get_db),
 
     return new_user
 
+
+
+
 #get one user
-#TODO: add a response model
 @router.get("/{id}")
 def get_user(id: int,
              db: Session = Depends(get_db)):
@@ -38,8 +45,10 @@ def get_user(id: int,
 
     return(get_user)
 
+
+
+
 #update a user
-#TODO: add response model
 @router.put("/{id}")
 def update_user(id: int, 
                 db: Session = Depends(get_db)):
@@ -56,8 +65,10 @@ def update_user(id: int,
 
     return{f"user {id}": "updated"}
 
+
+
+
 #delete a user
-#TODO: add HTTP return
 @router.delete("/{id}")
 def delete_user(id: int, 
                 db: Session = Depends(get_db)):
@@ -75,11 +86,13 @@ def delete_user(id: int,
 
 
 
+
+#Temporary login for users.
+#TODO: NB: need authentication for users!!!!!!!!!!!!!!!!!!!
 @router.post("/login")
 def userLogin(db: Session = Depends(get_db), 
               username: str = Form(...), 
               password: str = Form(...)):
-    #print(f"Received login attempt: username={username}, password={password}")
 
     attempt_user = db.query(dbModels.User).filter(dbModels.User.user_name == username, 
                                                   dbModels.User.user_password == password
@@ -87,7 +100,5 @@ def userLogin(db: Session = Depends(get_db),
 
     if not attempt_user:
         print("Invalid login: User not found")
-
-    #print(f"Login successful for user: {attempt_user.user_id}")
 
     return {"user_id": attempt_user.user_id, "message": "Login successful"}

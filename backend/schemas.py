@@ -1,5 +1,7 @@
 from pydantic import BaseModel
 
+#TODO add more specific response models later.
+
 class BasicUser(BaseModel):
     user_name: str
     user_password: str

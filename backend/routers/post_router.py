@@ -1,5 +1,4 @@
 import os
-
 from typing import List
 from fastapi import APIRouter, Depends, Form, UploadFile, File, Response, status
 from sqlalchemy.orm import Session
@@ -7,21 +6,21 @@ from database.database import get_db
 from database import dbModels
 from .. import schemas
 
+
 router = APIRouter(prefix="/posts",
                    tags=["posts"])
 
-# @router.get("/test")
-# def test():
-#     return{"posts": "works"}
 
+#Defines storage location for images
+#NOTE: see images router for more info
 BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__),"..",".."))
 
 Upload_Dir = os.path.join(BASE_DIR, "static", "uploaded_images")
+
 os.makedirs(Upload_Dir, exist_ok=True)
 
 
 
-#TODO: add frontend calls
 #TODO: add response model for all crud operations
 #TODO: add all http responses
 
@@ -47,6 +46,7 @@ def new_post(db: Session = Depends(get_db),
     
     for image in images:
         image_path = os.path.join(Upload_Dir, image.filename)
+
         with open(image_path, "wb") as f:
             f.write(image.file.read())
 
@@ -76,6 +76,7 @@ def update_post(id: int,
                 db: Session = Depends(get_db), 
                 title: str = Form(...), 
                 content: str = Form(...)):
+    
     update_post = db.query(dbModels.Post).filter(dbModels.Post.post_id == id).first()
 
     if update_post == None:
@@ -90,6 +91,7 @@ def update_post(id: int,
 
 
 #delete a single user
+#NOTE: check if deleting a user cascades to delete their posts and immages for those posts.
 @router.delete("/{id}")
 def delete_post(id: int,
                 db: Session = Depends(get_db)):
@@ -104,6 +106,8 @@ def delete_post(id: int,
 
     return Response(status_code=status.HTTP_204_NO_CONTENT)
 
+
+#return all posts in the database.
 @router.get("/")
 def get_all_posts(db: Session = Depends(get_db)):
 
@@ -111,6 +115,8 @@ def get_all_posts(db: Session = Depends(get_db)):
 
     return posts
 
+
+#return all the posts related to a specific user.
 @router.get("/user/{id}")
 def get_user_posts(id: int,
                    db: Session = Depends(get_db)):

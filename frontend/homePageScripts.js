@@ -1,3 +1,5 @@
+
+//when the page loads the posts will automatically be added to the page:
 document.addEventListener("DOMContentLoaded", async function(){
     const postList = document.getElementById("lstPosts");
 
@@ -26,21 +28,19 @@ document.addEventListener("DOMContentLoaded", async function(){
             postDiv.addEventListener("click", function(){
                 console.log(post.post_id);
                 document.cookie = "post_id="+post.post_id;
-                window.location = "viewPost.html"
+                window.location = "viewPost.html";
             })
 
             postList.appendChild(postDiv);
-
             fetchImages(post.post_id);
         }
-
     }
-
     catch(error){
         console.error("Error loading posts", error);
     }
 
 
+    //This will dynamically add image to the post div
     async function fetchImages(post_id) {
         const imageContainer = document.getElementById('images-'+post_id);
         
@@ -71,8 +71,6 @@ document.addEventListener("DOMContentLoaded", async function(){
         }
         catch(error){
             console.error("there was an error loading images: ", error);
-        }
-        
+        } 
     }
-
 });

@@ -4,14 +4,15 @@ document.getElementById("btnSubmit").addEventListener('click', async function(ev
     const new_username = document.getElementById("txtUsername").value;
     const new_password = document.getElementById("txtPassword").value;
 
-    console.log("Username: "+new_username+"\tPassword: "+new_password);
+    //console.log("Username: "+new_username+"\tPassword: "+new_password);
 
     const feedback = "Username: "+new_username+"\nPassword: "+new_password;
 
     document.getElementById("txtFeedback").textContent = feedback;
 
+    //API call to add a new user to the database.
     try{
-        const formdata = new URLSearchParams()
+        const formdata = new URLSearchParams();
         formdata.append("user_name", new_username);
         formdata.append("user_password", new_password);
 
@@ -29,15 +30,13 @@ document.getElementById("btnSubmit").addEventListener('click', async function(ev
             throw new Error("Network response was not ok: "+ response.status);
         }
 
-        console.log(response)
+        console.log(response);
 
         const data = await response.json();
 
-
-
         if(data.user_id){
-            console.log(data.user_id)
-            alert("user ("+data.user_id+") was created successfuly!")
+            console.log(data.user_id);
+            alert("user ("+data.user_id+") was created successfuly!");
         }
     }
     catch(error){

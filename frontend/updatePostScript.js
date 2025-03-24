@@ -1,9 +1,12 @@
+//Note this is the most complicated script so far
+
+
+//when the page loads this will automatically add the post the suer wants to edit.
 document.addEventListener("DOMContentLoaded", async function(){
-    
     const list = document.getElementById("lstUPosts");
     const post_id = getCookie("post_id")
 
-
+    //API call to fetch the specific post to edit and load its info into the page.
     try{
         const post = await fetch("http://127.0.0.1:8000/posts/"+post_id, {
             method: "GET",
@@ -24,11 +27,13 @@ document.addEventListener("DOMContentLoaded", async function(){
         console.error("Error loading posts", error);
     }
 
-    fetchImages(post_id)
-
+    //loades all the posts images.
+    fetchImages(post_id);
     async function fetchImages(post_id) {
         const imageContainer = document.getElementById('images');
 
+        //API call to get the images for the post.
+        //images themselves will be clickable and wil try to delete on click.
         try{
             const imageresponse = await fetch('http://127.0.0.1:8000/images/'+post_id, {
                 method: "GET",
@@ -45,15 +50,12 @@ document.addEventListener("DOMContentLoaded", async function(){
                 const img = document.createElement("img");
                 img.src = "http://127.0.0.1:8000/"+image.image_loc;
                 img.alt = "";
-
                 img.style.width = "200px";
                 img.style.height = "200px";
                 img.style.objectFit = "cover";
-
                 img.id = image.image_id;
 
                 img.addEventListener("click", async function() {
-
                     const isShure = confirm("Are you shure you want to remove this image?");
                     if(isShure){
                         removeImage(image.image_id);
@@ -61,12 +63,8 @@ document.addEventListener("DOMContentLoaded", async function(){
                     else{
                         return;
                     }
-
-                    
                 })
-
                 imageContainer.appendChild(img);
-
             }
 
             const btn = document.createElement("button");
@@ -77,13 +75,13 @@ document.addEventListener("DOMContentLoaded", async function(){
             btn.id = "newImage";
             imageContainer.appendChild(btn);
 
+            //this adds a button to add a new image to the post.
             const inp = document.createElement("input");
             inp.type = "file";
             inp.accept = "image/png, image/jpeg, image/jpg";
             inp.style.display = "none";
             inp.id = "inpImage";
             document.body.appendChild(inp);
-
         }
         catch(error){
             console.error("there was an error loading images: ", error);
@@ -92,10 +90,9 @@ document.addEventListener("DOMContentLoaded", async function(){
         document.getElementById("newImage").addEventListener("click", async function(){
             const inp = document.getElementById("inpImage")
             inp.click();
-
         })
 
-        const inp = document.getElementById("inpImage")
+        const inp = document.getElementById("inpImage");
 
         inp.addEventListener("change", async function(){
 
@@ -108,7 +105,8 @@ document.addEventListener("DOMContentLoaded", async function(){
         
                 formdata.append("image", file);
                 formdata.append("post_id", post_id);
-        
+                
+                //API call to add an image to the post.
                 try{
                     const response = await fetch("http://127.0.0.1:8000/images/", {
                         method: "POST",
@@ -130,11 +128,14 @@ document.addEventListener("DOMContentLoaded", async function(){
                     console.error("there was an error while trying to add inade: ", error);
                 }
             }
-        })
-        
+        }) 
     }
 })
 
+
+
+
+//this will submit(finalise) the changes made to the post
 document.getElementById("btnSubmit").addEventListener("click", async function() {
     const updateTitle = document.getElementById("txtUpdateTitle").value;
     const updateContent = document.getElementById("txtUpdateContent").value;
@@ -178,17 +179,10 @@ document.getElementById("btnSubmit").addEventListener("click", async function() 
 })
 
 
-function getCookie(name){
-    const cookies = document.cookie.split("; ");
-    for (const cookie of cookies){
-        const [key, value] = cookie.split("=");
-        if (key === name){
-            return decodeURI(value);
-        }
-    }
-    return null;
-}
 
+
+
+//API call to delete the image you are looking at.
 document.getElementById("btnDelete").addEventListener("click", async function () {
 
     const post_id = getCookie("post_id");
@@ -212,6 +206,9 @@ document.getElementById("btnDelete").addEventListener("click", async function ()
 });
 
 
+
+
+//API call to remove one image from th e post
 async function removeImage(id){
     try{
         const response = await fetch("http://127.0.0.1:8000/images/"+id, {
@@ -235,3 +232,17 @@ async function removeImage(id){
         console.error("Error while trying to delete image: ", error);
     }
 };
+
+
+
+
+function getCookie(name){
+    const cookies = document.cookie.split("; ");
+    for (const cookie of cookies){
+        const [key, value] = cookie.split("=");
+        if (key === name){
+            return decodeURI(value);
+        }
+    }
+    return null;
+}

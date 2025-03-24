@@ -4,9 +4,11 @@ document.getElementById("btnLogin").addEventListener('click', async function(eve
     const new_username = document.getElementById("txtUsername").value;
     const new_password = document.getElementById("txtPassword").value;
 
-    //console.log("Username: "+new_username+"\tPassword: "+new_password);
-
     try{
+
+        //api call to log in a user
+        //NOTE: the endpoint will possibly change if i add proper authentication.
+
         const formdata = new URLSearchParams()
         formdata.append("username", new_username);
         formdata.append("password", new_password);

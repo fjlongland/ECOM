@@ -1,3 +1,7 @@
+
+//this will simply load the image to the detailed view page, this will change when there is
+//information in a post that cannot be seen on the home page 
+//EG. adding a "BUY" button.
 document.addEventListener("DOMContentLoaded", async function(){
     const post_id = getCookie("post_id"); 
     
@@ -23,8 +27,7 @@ document.addEventListener("DOMContentLoaded", async function(){
     }
     catch(error){
         console.error("an error occured while trying to fetch post: ",error);
-    }
-        
+    }      
 })
 
 
@@ -56,7 +59,6 @@ async function fetchImages(post){
 
             imageContainer.appendChild(img);
         }
-
     }
     catch(error){
         console.error("there was an error while trying to fetch images: ", error);

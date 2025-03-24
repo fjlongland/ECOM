@@ -4,6 +4,9 @@ from sqlalchemy.orm import relationship
 from sqlalchemy.sql.sqltypes import TIMESTAMP
 from sqlalchemy.sql.expression import text
 
+
+#here we define and create all the database tables.
+
 class Test(Base):
     __tablename__="test"
 

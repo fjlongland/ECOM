@@ -1,6 +1,8 @@
 from pydantic_settings import BaseSettings
 from dotenv import load_dotenv
 
+#loads and implements the environment file.
+
 load_dotenv()
 
 class Settings(BaseSettings):

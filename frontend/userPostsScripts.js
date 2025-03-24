@@ -1,8 +1,8 @@
+//page will load all the posts related to the current logged on user
+//NOTE: this can be made more secure after adding authentication.
 document.addEventListener("DOMContentLoaded", async function(){
-    
     const list = document.getElementById("lstUPosts");
     const user_id = getCookie("user_id")
-
 
     try{
         const posts = await fetch("http://127.0.0.1:8000/posts/user/"+user_id, {
@@ -36,6 +36,8 @@ document.addEventListener("DOMContentLoaded", async function(){
         console.error("Error loading posts", error);
     }
 
+
+    //loads the images for the posts.
     async function fetchImages(post_id) {
         const imageContainer = document.getElementById('images-'+post_id);
 
@@ -61,30 +63,29 @@ document.addEventListener("DOMContentLoaded", async function(){
                 img.style.objectFit = "cover";
 
                 imageContainer.appendChild(img);
-
             }
-        
         }
         catch(error){
             console.error("there was an error loading images: ", error);
-        }
-        
+        } 
     }
 })
 
 
+
+//the button will open the edit post page and load that post automatically.
 document.addEventListener("click", function(event){
     if (event.target.classList.contains("btnEdit")){
         let postId = event.target.dataset.id;
         console.log("selecting post id: ", postId)
-
         document.cookie ="post_id="+encodeURIComponent(postId)+"; path=/";
-
         window.location.href = "updatePost.html";
     }
 
     console.log(document.cookie)
 })
+
+
 
 
 function getCookie(name){

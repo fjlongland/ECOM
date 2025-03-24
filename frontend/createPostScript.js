@@ -4,10 +4,11 @@ document.getElementById("btnUpload").addEventListener("click", async function(){
     const newImages =document.getElementById("inpImage").files;
     const userID = getCookie("user_id");
 
-    const feedback = "Title: "+newTitle+"\tContent: "+newContent+"\tid: "+userID
+    //const feedback = "Title: "+newTitle+"\tContent: "+newContent+"\tid: "+userID
+    //console.log(feedback)
 
-    console.log(feedback)
 
+    //API call to add a post to the database:
     try{
         const formdata = new FormData();
         formdata.append("title", newTitle);
@@ -40,8 +41,10 @@ document.getElementById("btnUpload").addEventListener("click", async function(){
     catch (error){
         console.error("network error: ", error)
     }
-})
+});
 
+
+//to get the user id so that the foreign key of user id can be filled.
 function getCookie(name){
     const cookies = document.cookie.split("; ");
     for (const cookie of cookies){
